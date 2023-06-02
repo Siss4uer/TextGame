@@ -136,7 +136,8 @@
     <ClInclude Include="function.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="pack_01.level" />
+    <None Include="charactor.json" />
+    <None Include="pack_01.json" />
     <None Include="README.md" />
     <None Include="save.f" />
   </ItemGroup>

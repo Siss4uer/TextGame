@@ -40,7 +40,10 @@
     <None Include="README.md">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="pack_01.level">
+    <None Include="pack_01.json">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="charactor.json">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
