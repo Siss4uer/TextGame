@@ -131,6 +131,7 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cJSON.h" />
     <ClInclude Include="function.h" />
   </ItemGroup>
   <ItemGroup>
