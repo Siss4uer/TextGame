@@ -8,6 +8,8 @@
 #include "struct.h"
 #include <string.h>
 #include <math.h>
+#include "cJSON.h"
+#include "color.h"
 
 extern struct DASHBOARD DASHBOARD;
 extern int initvalue[];
@@ -32,20 +34,11 @@ int random(int mode, int low, int high) {
 	}
 }//Mode = 1，在low和high中随机返回一个值，Mode = 2，在Low和High给定的范围内随机一个数
 
-struct ORDER GETINPUT(int mode) {
-	struct ORDER ORDER = {0,0,""};
+int GETINPUT() {
+	
 
-	if (mode) {//Mode = 1 定义为无文本输入
-		ORDER.MODE = 1;
-		scanf("%d", &ORDER.ORDERNUM);
-		return ORDER;
-	}
-	else {//Mode = 0 定义为有文本输入
-		ORDER.MODE = 0;
-		scanf("%s", ORDER.TEXT);
-		return ORDER;
-	}
-}//获取输入
+	
+}
 
 void GAMEOVER(int DAMAGEFROM) {
 	printf("-----GAMEOVER-----");
@@ -193,7 +186,16 @@ void init(void) {
 	scanf("%[^\n]", DASHBOARD.SELF.NAME);
 	printf("\n");
 }
-
+void help(void) {
+	printf("在任何输入情况下，你均可输入!help获取帮助\n");
+	printf("输入!status可以获取当前人物信息\n");
+	printf("输入!action可以进行行动步骤决策\n");
+	printf("输入!backpack可以获取背包内信息\n");
+	printf("输入!use + id 可以使用背包内的物品\n");
+	printf("输入!skip可以在允许的情况下进入下一天\n");
+	printf("输入!goto可以查询或前往可用的地点\n");
+	printf("输入!charactor可以触发NPC交互\n");
+}
 void SHOW() {
 	int BUFFNUM;
 	printf("TIME|---|DAY-%d-HOURS-%d-MINUTES-%d\n", DASHBOARD.TIME.DAY, DASHBOARD.TIME.HOURS, DASHBOARD.TIME.MINUTES);
@@ -245,7 +247,7 @@ int UNLOADER(FILE* fp) {
 	}
 	return err;
 }
-int GETPLOT(FILE* fp) {
+int GETPLOT() {
 
 }
 int userinterface() {

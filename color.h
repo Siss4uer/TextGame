@@ -18,7 +18,9 @@
 #define LIGHTPURPLE 12	//µ­×ÏÉ« 
 #define LIGHTYELLOW 13	//µ­»ÆÉ« 
 #define BRIGHTWHITE 14	//ÁÁ°×É«
-void setcolor(int color)
+void print(int color,char src[])
 {
 	HANDLE hConsoleWnd; hConsoleWnd = GetStdHandle(STD_OUTPUT_HANDLE); SetConsoleTextAttribute(hConsoleWnd, color);
+	printf("%s", src);
+	SetConsoleTextAttribute(hConsoleWnd, 7);
 }

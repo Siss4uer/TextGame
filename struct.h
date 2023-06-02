@@ -8,12 +8,6 @@ typedef struct SELF{
 	int THIRSTY;
 }SELF;
 
-typedef struct ORDER {
-	int MODE;
-	int ORDERNUM;
-	char TEXT[128];
-}ORDER;
-
 typedef struct TIME {
 	int DAY;
 	int HOURS;
