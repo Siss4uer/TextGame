@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cJSON.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="function.h" />
   </ItemGroup>
   <ItemGroup>
