@@ -245,64 +245,10 @@ int UNLOADER(FILE* fp) {
 	}
 	return err;
 }
-int strkv(char* src, char* key, char* value)
-{
-	char* EQUAL, * TAB;
-	EQUAL = strchr(src, '=');//p找到等号
-	TAB = strchr(src, '\n');//q找到换行
-	//如果有等号有换行
-	if (EQUAL != NULL && TAB != NULL)
-	{
-		*TAB = '\0'; //将换行设置为字符串结尾
-		strncpy(key, src, EQUAL - src); //将等号前的内容拷入key中
-		strcpy(value, EQUAL + 1); //将等号后的内容拷入value中，跳过等号所以p需要加1
-		return 1;
-	}
-	return 0;
-}
+int GETPLOT(FILE* fp) {
 
-int CONFIGREADER(char PATH[], struct CONFIG level_config[], int configNum) {
-	int i;
-	FILE* pfile;
-	char buf[50] = "";  //缓冲字符串
-	char key[50] = "";  //配置变量名
-	char value[50] = ""; //配置变量值
-	pfile = LOADER(PATH, 2);
-	if (pfile == NULL)
-	{
-		printf("CONFIG FILE LOAD FAILED\n");
-		return 0;
-	}
-	while (fgets(buf, 50, pfile))
-	{	
-		//读取键值对
-		if (strkv(buf, key, value))
-		{
-			//读取成功则循环匹配数组
-			for (i = 0; i < configNum; i++)
-			{
-				//名称相等则匹配成功，拷贝value值
-				if (strcmp(key, level_config[i].key) == 0)
-				{
-					strcpy(level_config[i].value, value);
-				}
-			}
-			//key字符串在strkv函数内部没有给结束符'\0'，需要这里重置一下
-			//value在strkv中已经给了结束符'\0'
-			memset(key, 0, strlen(key));
-		}
-	}
-	fclose(pfile);
 }
-int READLEVEL(char FILENAME[]) {
-	struct CONFIG level_config[3] = {
-		{"level_Name",""},
-		{"level_Type",""},
-		{"level_Plot",""}
-	};
-	//读取配置文件
-	CONFIGREADER(FILENAME, level_config, sizeof(level_config) / sizeof(struct CONFIG));
-	system("pause");
-	return 0;
+int userinterface() {
+	
 }
 #endif
