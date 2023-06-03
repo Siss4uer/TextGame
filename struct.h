@@ -1,5 +1,6 @@
 #ifndef __STRUCT_
 #define __STRUCT_
+#define MAXACTION 4
 extern struct DASHBOARD DASHBOARD;
 typedef struct SELF{
 	char NAME[10];
@@ -16,7 +17,7 @@ typedef struct TIME {
 
 typedef struct BUFF {
 	int BUFFID;
-	char BUFFNAME[64];
+	char BUFFNAME[10];
 	char DESCRIPTION[1024];
 }BUFF;
 
@@ -34,13 +35,16 @@ typedef struct DASHBOARD{
 
 typedef struct ITEM {
 	int ITEMID;
-	int NBT[16];
 	char ITEMNAME[64];
 	char DESCRIPTION[1024];
+	int NBT[3];
 }ITEM;
 
 typedef struct BACKPACK {
-	struct ITEM ITEMINPACK[128];
+	struct ITEM ITEMINPACK[8];
 }BACKPACK;
-
+typedef struct ACTION {
+	int actionNum;
+	char action[MAXACTION][32];
+}ACTION;
 #endif

@@ -12,6 +12,7 @@
 #include "color.h"
 #define MAXACTION 4
 extern struct DASHBOARD DASHBOARD;
+extern struct BACKPACK backpack;
 extern int initvalue[];
 extern int dailyeventsvalue[];
 int random(int mode, int low, int high) {
@@ -167,7 +168,16 @@ int DAILYEVENTS() {
 	THIRSTY_CHANGER(0, dailyeventsvalue[1]);
 }//每天触发一次
 
-void init(void) {
+
+int init(void) {
+	struct ITEM guider = { {1},{"guider"},{"这是一本引导手册，用于测试背包系统"},{0,0,0} };
+	for (int i = 0; i < 8; i++) {
+		backpack.ITEMINPACK[i].ITEMID = 0;
+		strcpy(backpack.ITEMINPACK[i].DESCRIPTION, "");
+		strcpy(backpack.ITEMINPACK[i].ITEMNAME, "");
+		strcpy(backpack.ITEMINPACK[i].NBT, "");
+	}
+	give_ITEM(guider);
 	DASHBOARD.BUFFLIST.NUM = initvalue[0];
 	DASHBOARD.SCORE = initvalue[1];
 	DASHBOARD.TIME.DAY = initvalue[2];
@@ -176,24 +186,28 @@ void init(void) {
 	DASHBOARD.SELF.HEALTH = initvalue[6];
 	DASHBOARD.SELF.HUNGER = initvalue[7];
 	DASHBOARD.SELF.THIRSTY = initvalue[8];
+	rename:
 	printf("Input your name - >");
 	scanf("%[^\n]", DASHBOARD.SELF.NAME);
 	printf("\n");
-
+	
 }
 void help(void) {
-	printf("在任何输入情况下，你均可输入!help获取帮助\n");
-	printf("输入!status可以获取当前人物信息\n");
-	printf("输入!action可以进行行动步骤决策\n");
-	printf("输入!backpack可以获取背包内信息\n");
-	printf("输入!use + id 可以使用背包内的物品\n");
-	printf("输入!skip可以在允许的情况下进入下一天\n");
-	printf("输入!goto可以查询或前往可用的地点\n");
-	printf("输入!charactor可以触发NPC交互\n");
-	printf("输入!exit可以退出程序\n");
+	printf("------------------------帮助展示------------------------\n");
+	printf("在任何输入情况下，你均可输入help获取帮助\n");
+	printf("输入status可以获取当前人物信息\n");
+	printf("输入action可以进行行动步骤决策\n");
+	printf("输入backpack可以获取背包内信息\n");
+	printf("输入use + id 可以使用背包内的物品\n");
+	printf("输入save可以进行存档保存\n");
+	printf("输入goto可以查询或前往可用的地点\n");
+	printf("输入charactor可以触发NPC交互\n");
+	printf("输入cls可以清空窗口\n");
+	printf("输入exit可以退出程序\n");
 }
-void SHOW() {
+void show_DASHBOARD() {
 	int BUFFNUM;
+	printf("------------------------信息展示------------------------\n");
 	printf("TIME|---|DAY-%d-HOURS-%d-MINUTES-%d\n", DASHBOARD.TIME.DAY, DASHBOARD.TIME.HOURS, DASHBOARD.TIME.MINUTES);
 	printf("PROPERTY|---|NAME->%s|HEALTH->%d|HUNGER->%d\n", DASHBOARD.SELF.NAME, DASHBOARD.SELF.HEALTH, DASHBOARD.SELF.HUNGER);
 	printf("ADDITIVE ATTRIBUTE|---|");
@@ -204,6 +218,7 @@ void SHOW() {
 		printf("%s|", DASHBOARD.BUFFLIST.BUFF->BUFFNAME);
 	}
 	printf("\n");
+	
 }
 FILE* LOADER(char PATH[], int mode) {
 	FILE* fp;
@@ -246,63 +261,117 @@ int UNLOADER(FILE* fp) {
 int GETPLOT() {
 
 }
-int common_command_Trans(int actionNum, char action[MAXACTION][32]) {
+int give_ITEM(struct ITEM item) {
+	for (int i = 0; i < 8; i++) {
+		if (backpack.ITEMINPACK[i].ITEMID == 0) {
+			backpack.ITEMINPACK[i].ITEMID = item.ITEMID;
+			strcpy(backpack.ITEMINPACK[i].DESCRIPTION, item.DESCRIPTION);
+			strcpy(backpack.ITEMINPACK[i].ITEMNAME, item.ITEMNAME);
+			strcpy(backpack.ITEMINPACK[i].NBT, item.NBT);
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int show_BACKPACK(int mode){
+	if (mode) {
+		printf("------------------------背包展示------------------------\n");
+		for (int i = 0; i < 8; i++) {
+			if (backpack.ITEMINPACK[i].ITEMID == 0) {
+				break;
+			}
+			printf("<No.%d - %s - %d -{%d,%d,%d}>|", i + 1, backpack.ITEMINPACK[i].ITEMNAME, backpack.ITEMINPACK[i].ITEMID, backpack.ITEMINPACK[i].NBT[0], backpack.ITEMINPACK[i].NBT[1], backpack.ITEMINPACK[i].NBT[2]);
+			if (i % 2 == 0) {
+				printf("\n");
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < 8; i++) {
+			if (backpack.ITEMINPACK[i].ITEMID == 0) {
+				return i;
+			}
+		}
+	}
+}
+int common_command_Trans(struct ACTION action) {
 	char input[32];
 	int i;
 	while (1) {
-		start:
+	main_start:
+		printf("------------------------目录阶段------------------------\n");
 		printf(">");
 		scanf("%s", input);
-		if (strcmp(input, "!help") == 0) {
+		if (strcmp(input, "help") == 0) {
 			help();
 		}
-		else if (strcmp(input, "!status") == 0) {
-			SHOW();
+		else if (strcmp(input, "status") == 0) {
+			show_DASHBOARD();
 		}
-		else if (strcmp(input, "!action") == 0)
+		else if (strcmp(input, "action") == 0)
 		{
-			choice:
-			printf("------------------------进入行动阶段------------------------\n");
-			for (i = 1; i <= actionNum; i++) {
-				printf("%d - %s\n", i, action[i - 1]);
+			action_choice:
+			printf("-----------------------进入行动阶段-----------------------\n");
+			for (i = 1; i <= action.actionNum; i++) {
+				printf("%d - %s\n", i, action.action[i - 1]);
 			}
-			printf("%d - 退出行动阶段\n",actionNum + 1);
+			printf("%d - 退出行动阶段\n",action.actionNum + 1);
 			printf(">");
 			scanf("%s", input);
-			printf("%s",input);
-			for (i = 1; i <= actionNum; i++) {
-				if (input == i) {
+			for (i = 1; i <= action.actionNum; i++) {
+				if ((atoi(input) == i)||((strcmp(input, action.action[i-1]))==0)) {
 					return i;
 				}
-				else if (input == (actionNum + 1)) {
-					goto start;
+				if ((atoi(input) == action.actionNum +1) || ((strcmp(input,"exit")==0))) {
+					goto main_start;
 				}
-				else {
-					printf("Error Command\n");
-					goto choice;
-				}
-	
 			}
-			
+			printf("Error Command\n");
+			goto action_choice;
 		}
-		else if (strcmp(input, "!backpack") == 0)
+		else if (strcmp(input, "backpack") == 0)
+		{
+			backpack_start:
+			show_BACKPACK(1);
+			backpack_choice:
+			printf("--------------------选择物品进行了解--------------------\n");
+			printf(">");
+			scanf("%s", input);
+			for (i = 1; i <= show_BACKPACK(0); i++) {
+				if ((atoi(input) == i) || ((strcmp(input,backpack.ITEMINPACK[i-1].ITEMNAME)) == 0)) {
+					printf("[No.%d]-[%s]\nNBT = {%d,%d,%d}\n描述 [%s]\n", i, backpack.ITEMINPACK[i - 1].ITEMNAME, backpack.ITEMINPACK[i - 1].NBT[0], backpack.ITEMINPACK[i - 1].NBT[1], backpack.ITEMINPACK[i - 1].NBT[2], backpack.ITEMINPACK[i - 1].DESCRIPTION);
+					goto backpack_choice;
+				}
+				if ((atoi(input) == action.actionNum + 1) || ((strcmp(input, "exit") == 0))) {
+					goto main_start;
+				}
+				if (strcmp(input, "show") == 0) {
+					goto backpack_start;
+				}
+
+			}
+			printf("Error Command\n");
+			goto backpack_choice;
+		}
+		else if (strcmp(input, "use") == 0)
 		{
 
 		}
-		else if (strcmp(input, "!use") == 0)
-		{
-
-		}
-		else if (strcmp(input, "!skip") == 0)
+		else if (strcmp(input, "save") == 0)
 		{
 		}
-		else if (strcmp(input, "!goto") == 0)
+		else if (strcmp(input, "goto") == 0)
 		{
 		}
-		else if (strcmp(input, "!charactor") == 0)
+		else if (strcmp(input, "charactor") == 0)
 		{
 		}
-		else if (strcmp(input, "!exit") == 0)
+		else if (strcmp(input, "cls") == 0)
+		{
+			printf("\033[2J\033[1;1H");
+		}
+		else if (strcmp(input, "exit") == 0)
 		{
 			exit(0);
 		}
