@@ -1,7 +1,6 @@
 #ifndef __STRUCT_
 #define __STRUCT_
 extern struct DASHBOARD DASHBOARD;
-extern struct ACTION ACTION;
 typedef struct SELF{
 	char NAME[10];
 	int HEALTH;

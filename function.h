@@ -14,7 +14,6 @@
 extern struct DASHBOARD DASHBOARD;
 extern int initvalue[];
 extern int dailyeventsvalue[];
-extern char actionlist[4][32];
 int random(int mode, int low, int high) {
 	int randomer;
 	if (mode) {
@@ -180,12 +179,7 @@ void init(void) {
 	printf("Input your name - >");
 	scanf("%[^\n]", DASHBOARD.SELF.NAME);
 	printf("\n");
-	for (int i = 0; i < MAXACTION; i++) {
-		for (int j = 0; j < 32; j++) {
-			actionlist[i][] = "None\0";
-		}
-	}
-	
+
 }
 void help(void) {
 	printf("在任何输入情况下，你均可输入!help获取帮助\n");
@@ -252,57 +246,73 @@ int UNLOADER(FILE* fp) {
 int GETPLOT() {
 
 }
-int common_command_Trans(char input[]) {
-	if (strcmp(input, "!help") == 0) {
-		help();
-		return 0;
-	}
-	else if (strcmp(input, "!status") == 0) {
-		SHOW();
-		return 0;
-	}
-	else if (strcmp(input, "!action") == 0)
-	{
-		action();
-		return 0;
-	}
-	else if (strcmp(input, "!backpack") == 0)
-	{
-		return 0;
-	}
-	else if (strcmp(input, "!use") == 0)
-	{
-		return 0;
-	}
-	else if (strcmp(input, "!skip") == 0)
-	{
-		return 0;
-	}
-	else if (strcmp(input, "!goto") == 0)
-	{
-		return 0;
-	}
-	else if (strcmp(input, "!charactor") == 0)
-	{
-		return 0;
-	}
-	else if (strcmp(input, "!exit") == 0)
-	{
-		exit(0);
-	}
-	else {
-		return 1;
-	}
-
-}
-
-int action() {
+int common_command_Trans(int actionNum, char action[MAXACTION][32]) {
 	char input[32];
-	printf("------------------------行动选择阶段-----------------------------\n");
-	for (int i = 0; i < MAXACTION; i++) {
-		for (int j = 0; j < 32; j++) {
-			printf("%s", actionlist[i][j]);
+	int i;
+	while (1) {
+		start:
+		printf(">");
+		scanf("%s", input);
+		if (strcmp(input, "!help") == 0) {
+			help();
+		}
+		else if (strcmp(input, "!status") == 0) {
+			SHOW();
+		}
+		else if (strcmp(input, "!action") == 0)
+		{
+			choice:
+			printf("------------------------进入行动阶段------------------------\n");
+			for (i = 1; i <= actionNum; i++) {
+				printf("%d - %s\n", i, action[i - 1]);
+			}
+			printf("%d - 退出行动阶段\n",actionNum + 1);
+			printf(">");
+			scanf("%s", input);
+			printf("%s",input);
+			for (i = 1; i <= actionNum; i++) {
+				if (input == i) {
+					return i;
+				}
+				else if (input == (actionNum + 1)) {
+					goto start;
+				}
+				else {
+					printf("Error Command\n");
+					goto choice;
+				}
+	
+			}
+			
+		}
+		else if (strcmp(input, "!backpack") == 0)
+		{
+
+		}
+		else if (strcmp(input, "!use") == 0)
+		{
+
+		}
+		else if (strcmp(input, "!skip") == 0)
+		{
+		}
+		else if (strcmp(input, "!goto") == 0)
+		{
+		}
+		else if (strcmp(input, "!charactor") == 0)
+		{
+		}
+		else if (strcmp(input, "!exit") == 0)
+		{
+			exit(0);
+		}
+		else {
+			printf("Unknow Command\n");
 		}
 	}
+	
+
 }
+
+
 #endif
