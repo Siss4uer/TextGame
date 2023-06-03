@@ -1,6 +1,7 @@
 #ifndef __STRUCT_
 #define __STRUCT_
 extern struct DASHBOARD DASHBOARD;
+extern struct ACTION ACTION;
 typedef struct SELF{
 	char NAME[10];
 	int HEALTH;
@@ -43,8 +44,4 @@ typedef struct BACKPACK {
 	struct ITEM ITEMINPACK[128];
 }BACKPACK;
 
-typedef struct CONFIG{
-	char key[20];
-	char value[50];
-}CONFIG;
 #endif
