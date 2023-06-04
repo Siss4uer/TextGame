@@ -133,15 +133,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cJSON.h" />
-    <ClInclude Include="color.h" />
-    <ClInclude Include="common.h" />
+    <ClInclude Include="json_function.h" />
     <ClInclude Include="function.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="charactor.json" />
+    <None Include="itemID.json" />
     <None Include="pack_01.json" />
     <None Include="README.md" />
     <None Include="save.f" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Trans_CN.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

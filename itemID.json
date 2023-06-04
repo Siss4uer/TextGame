@@ -1,0 +1,26 @@
+{
+	"1": {
+		"ITEMID": 1,
+		"ITEMNAME": "guider",
+		"NBT": [ 0, 0, 0 ],
+		"OPERATE": [ -5, 0, 0, 0 ]
+	},
+	"2": {
+		"ITEMID": 2,
+		"ITEMNAME": "water",
+		"NBT": [ 0, 0, 0 ],
+		"OPERATE": [ 0, 1, 0, 0 ]
+	},
+	"3": {
+		"ITEMID": 3,
+		"ITEMNAME": "eatable_blocks",
+		"NBT": [ 0, 0, 0 ],
+		"OPERATE": [ 0, 10, 0, 0 ]
+	},
+	"4": {
+		"ITEMID": 4,
+		"ITEMNAME": "Hot_Water_pot",
+		"NBT": [ 0, 0, 0 ],
+		"OPERATE": [ 2, 0, 1, 0 ]
+	}
+}

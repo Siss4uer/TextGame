@@ -6,7 +6,8 @@ typedef struct SELF{
 	char NAME[10];
 	int HEALTH;
 	int HUNGER;
-	int THIRSTY;
+	int DESIRED;
+	int SAN;
 }SELF;
 
 typedef struct TIME {
@@ -38,7 +39,21 @@ typedef struct ITEM {
 	char ITEMNAME[64];
 	char DESCRIPTION[1024];
 	int NBT[3];
+	int OPERATE[4];
 }ITEM;
+typedef struct ITEM_USED {
+	int ITEMID;
+	int NBT[3];
+}ITEM_USED;
+typedef struct ITEM_USED_LIST {
+	int NUM;
+	struct ITEM_USED ITEM_USED[8];
+}ITEM_USED_LIST;
+//OPERATE
+//第一个值代表对血量操作 操作值大于100时视为提升血量上限制
+//第二个值代表对饥饿值操作
+//第三个值代表对希望值操作 操作值大于100时视为提升希望上限制
+//第四个值代表对理智值操作
 
 typedef struct BACKPACK {
 	struct ITEM ITEMINPACK[8];
