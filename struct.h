@@ -59,22 +59,29 @@ typedef struct BACKPACK {
 	struct ITEM ITEMINPACK[8];
 }BACKPACK;
 typedef struct ACTION {
+	char* descriptin_choice;
 	int actionNum;
 	char action[MAXACTION][32];
 }ACTION;
 
 typedef struct Selection {
 	int operate[4];
+	char DESCRIPTION[1024];
 	char next_node[50];
+
 } Selection;
 
 typedef struct Node{
 	char command[50];
 	int action;
+	char DESCRIPTION[128];
 	Selection selections[4];
 } Node;
 
 typedef struct PLOT_STORAGE {
+	char file_load_now[20];
 	struct Node file_node[32];
 }PLOT_STORAGE;
+
+
 #endif

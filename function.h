@@ -14,13 +14,18 @@
 
 #define MAXACTION 4
 #define MAX_LINES 100
-#define MAX_LINE_LENGTH 100
+#define MAX_LINE_LENGTH 1000
+#define MAX_TOKENS 10
+#define MAX_TOKEN_LENGTH 100
+#define MAX_LENGTH 100
 
 extern struct DASHBOARD DASHBOARD;
 extern struct BACKPACK backpack;
 extern struct ITEM_USED_LIST USED_LIST;
+extern struct PLOT_STORAGE plot_storage;
 extern int initvalue[];
 extern int dailyeventsvalue[];
+extern int Node_pos;
 
 
 //工具函数
@@ -56,6 +61,20 @@ ITEM create_ITEM(int ItemID, char* ItemName, int hP, int hUNGER, int dESIRED, in
 	item.NBT[2] = 0;
 	return item;
 }
+int splitString(const char* str, const char* delimiter, char** result, int maxTokens) {
+	char* token;
+	int count = 0;
+
+	token = strtok((char*)str, delimiter);
+	while (token != NULL && count < maxTokens) {
+		result[count] = strdup(token);
+		token = strtok(NULL, delimiter);
+		count++;
+	}
+
+	return count;
+}
+
 //数值修改函数
 int HEALTH_CHANGER(int value, int DAMAGEFROM) {
 	void GAMEOVER(int DAMAGEFROM);
@@ -236,7 +255,9 @@ int DAILYEVENTS() {
 }//每天触发一次
 
 //初始化函数
-void init(void) {
+void init(char* init_pack) {
+	void help(void);
+	void show_DASHBOARD(void);
 	DASHBOARD.BUFFLIST.NUM = initvalue[0];
 	DASHBOARD.SCORE = initvalue[1];
 	DASHBOARD.TIME.DAY = initvalue[2];
@@ -247,16 +268,21 @@ void init(void) {
 	DASHBOARD.SELF.DESIRED = initvalue[8];
 	DASHBOARD.SELF.SAN = initvalue[9];
 	USED_LIST.NUM = 0;
+	json_plot(&plot_storage, init_pack);
+	strcpy(plot_storage.file_load_now, init_pack);
+	get_CHOICE_CN(&plot_storage);
 	rename:
 	printf("Input your name - >");
 	scanf("%[^\n]", DASHBOARD.SELF.NAME);
 	printf("\n");
-	
+	printf("\033[2J\033[1;1H");
+	show_DASHBOARD();
+	help();
 }
 
 //UI函数
 void help(void) {
-	printf("------------------------帮助展示------------------------\n");
+	printf("-------------------------帮助展示-------------------------\n");
 	printf("在任何输入情况下，你均可输入help获取帮助\n");
 	printf("输入status可以获取当前人物信息\n");
 	printf("输入action可以进行行动步骤决策\n");
@@ -268,9 +294,9 @@ void help(void) {
 	printf("输入cls可以清空窗口\n");
 	printf("输入exit可以退出程序\n");
 }
-void show_DASHBOARD() {
+void show_DASHBOARD(void) {
 	int BUFFNUM;
-	printf("------------------------信息展示------------------------\n");
+	printf("-------------------------信息展示-------------------------\n");
 	printf("TIME|---|DAY-%d-HOURS-%d-MINUTES-%d\n", DASHBOARD.TIME.DAY, DASHBOARD.TIME.HOURS, DASHBOARD.TIME.MINUTES);
 	printf("PROPERTY|---|NAME->%s|HEALTH->%d|HUNGER->%d|DESIRED->%d|SAN->%d\n", DASHBOARD.SELF.NAME, DASHBOARD.SELF.HEALTH, DASHBOARD.SELF.HUNGER, DASHBOARD.SELF.DESIRED,DASHBOARD.SELF.SAN);
 	printf("ADDITIVE ATTRIBUTE|---|");
@@ -362,6 +388,74 @@ int get_PLOT_CN(Node* node) {
 	
 	return 1;
 }
+void parseText(char* text, int num, PLOT_STORAGE* plot_storage) {
+	char* token;
+	char* line = strtok(text, "$");
+	int count = 0;
+	while (line != NULL) {
+		char* tokens[MAX_TOKENS];
+		int numTokens = 0;
+
+		// 解析每一行的标记
+		token = strtok(line, "#");
+		while (token != NULL && numTokens < MAX_TOKENS) {
+			tokens[numTokens] = token;
+			numTokens++;
+			token = strtok(NULL, "#");
+		}
+
+		// 检查第一个标记是否匹配给定的数字
+		if (numTokens > 0) {
+			int i;
+			for (i = 1; i <= plot_storage->file_node[num].action; i++) {
+				strcpy(plot_storage->file_node[num].selections[i-1].DESCRIPTION, tokens[i]);
+			}
+			strcpy(plot_storage->file_node[num].DESCRIPTION, tokens[i]);
+		}
+		line = strtok(NULL, "$");
+	}
+}
+int get_CHOICE_CN(PLOT_STORAGE* plot_storage) {
+	char text[MAX_LINE_LENGTH];
+	char FILE_LOAD[50];
+	strcpy(FILE_LOAD, plot_storage->file_load_now);
+	char* dot = strrchr(FILE_LOAD, '.');
+	if (dot != NULL) {
+		// 将点后面的部分替换为新的文件扩展名和后缀
+		strcpy(dot, "_Trans_CN.txt");
+
+	}
+	else {
+		printf("文件名格式不正确\n");
+	}
+	FILE* file = fopen(FILE_LOAD, "r");
+	if (file == NULL) {
+		printf("无法打开文件\n");
+		return 1;
+	}
+
+	// 读取文件中的文本
+	int order = 0;
+	while (fgets(text, sizeof(text), file)) {
+		// 去除换行符
+		text[strcspn(text, "\n")] = '\0';
+		// 解析文本
+		parseText(text,order,plot_storage);
+		order++;
+	}
+
+	fclose(file);
+	return 0;
+}
+ACTION NodeToAction(Node node) {
+	ACTION action;
+	action.actionNum = node.action;
+	for (int i = 0; i < node.action; i++) {
+		strcpy(action.action[i], node.selections[i].DESCRIPTION);
+	}
+	action.descriptin_choice = node.DESCRIPTION;
+	return action;
+}
 
 //游戏内应用函数
 int give_ITEM(int ItemID) {
@@ -419,7 +513,7 @@ int common_command_Trans(struct ACTION action){
 	char input[32];
 	while (1) {
 	main_start:
-		printf("------------------------目录阶段------------------------\n");
+		printf("-------------------------目录阶段-------------------------\n");
 		printf(">");
 		scanf("%s", input);
 		if (strcmp(input, "help") == 0) {
@@ -433,6 +527,7 @@ int common_command_Trans(struct ACTION action){
 			int i;
 			action_choice:
 			printf("-----------------------进入行动阶段-----------------------\n");
+			printf("%s\n", action.descriptin_choice);
 			for (i = 1; i <= action.actionNum; i++) {
 				printf("%d - %s\n", i, action.action[i - 1]);
 			}
@@ -514,6 +609,8 @@ int common_command_Trans(struct ACTION action){
 	
 
 }
+int plot_output(int Node_pos) {
 
+}
 
 #endif

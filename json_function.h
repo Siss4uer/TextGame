@@ -173,11 +173,13 @@ ITEM* item_GET(int ItemID) {
 Node printNode(const Node* node) {
     printf("Command: %s\n", node->command);
     printf("Action: %d\n", node->action);
+    printf("Description before choice %s:\n", node->DESCRIPTION);
     for (int i = 0; i < MAX_OPERATES; i++) {
         const Selection* selection = &(node->selections[i]);
         printf("Selection %d:\n", i + 1);
-        printf("Operate: %d, %d, %d, %d\n", selection->operate[0], selection->operate[1], selection->operate[2], selection->operate[3]);
-        printf("Next Node: %s\n", selection->next_node);
+        printf("Description %s:\n", node->selections[i].DESCRIPTION);
+        printf("Operate: %d, %d, %d, %d\n", node->selections[i].operate[0], selection->operate[1], selection->operate[2], selection->operate[3]);
+        printf("Next Node: %s\n", node->selections[i].next_node);
     }
     printf("\n");
 }
@@ -271,11 +273,14 @@ int json_plot(PLOT_STORAGE* plot_storage,char* filename) {
         readNode(nodeItem, &node);
         strcpy(plot_storage->file_node[order].command, node.command);
         plot_storage->file_node[order].action = node.action;
-        plot_storage->file_node[order].selections->operate[0] = node.selections->operate[0];
-        plot_storage->file_node[order].selections->operate[1] = node.selections->operate[1];
-        plot_storage->file_node[order].selections->operate[2] = node.selections->operate[2];
-        plot_storage->file_node[order].selections->operate[3] = node.selections->operate[3];
-        strcpy(plot_storage->file_node[order].selections->next_node, node.selections->next_node);
+        for (int i = 0; i < node.action; i++) {
+            for (int j = 0; j < 4; j++) {
+                plot_storage->file_node[order].selections[i].operate[j] = node.selections[i].operate[j];
+            }
+            strcpy(plot_storage->file_node[order].selections[i].next_node, node.selections[i].next_node);
+        }
+
+        
         nodeItem = nodeItem->next;
         order++;
     }

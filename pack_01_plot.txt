@@ -3,3 +3,16 @@
 #你现在处于开发者测试界面#以上文本是在出发comman_command_trans()函数之前的剧情文本
 #这个文本按照知道那个符号为分割并以特定符号为结尾
 #接下来将触发comman_command_trans()函数$
+#node_2#
+#现在是Node2节点
+#接下来将触发comman_command_trans()函数$
+#node_3#
+#现在是Node3节点
+#接下来将触发comman_command_trans()函数$
+#node_4#
+#现在是Node4节点
+#接下来将触发comman_command_trans()函数$
+#node_5#
+#现在是Node_5节点
+#接下来将触发comman_command_trans()函数$
+
