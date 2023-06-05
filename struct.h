@@ -62,4 +62,19 @@ typedef struct ACTION {
 	int actionNum;
 	char action[MAXACTION][32];
 }ACTION;
+
+typedef struct Selection {
+	int operate[4];
+	char next_node[50];
+} Selection;
+
+typedef struct Node{
+	char command[50];
+	int action;
+	Selection selections[4];
+} Node;
+
+typedef struct PLOT_STORAGE {
+	struct Node file_node[32];
+}PLOT_STORAGE;
 #endif

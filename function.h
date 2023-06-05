@@ -125,7 +125,7 @@ int HUNGER_CHANGER(int value) {
 	else if(value >0){
 		HUNGER += value;
 		if (HUNGER > initvalue[7]) {
-			printf("HUNGER ADD - > %d | %d/%d", value, HUNGER, initvalue[7]);
+			printf("HUNGER ADD - > %d | %d/%d", value, initvalue[7], initvalue[7]);
 			printf("\n");
 			printf("HP ADD BECAUSE OF HUNGER\n");
 			HEALTH_CHANGER(HUNGER - initvalue[7], 1);
@@ -325,7 +325,7 @@ int get_ITEM_CN(ITEM* item) {
 	char strings[3][MAX_LINE_LENGTH];
 	char* temp;
 	FILE* fp;
-	fopen_s(&fp,"Trans_CN.txt", "r+");
+	fopen_s(&fp,"Item_Trans_CN.txt", "r");
 	//判断文件是否打开成功
 	if (fp == NULL) {
 		printf("Failed to open file.\n");
@@ -358,7 +358,8 @@ int get_ITEM_CN(ITEM* item) {
 		}
 	}
 }
-int get_PLOT() {
+int get_PLOT_CN(Node* node) {
+	
 	return 1;
 }
 
@@ -386,6 +387,15 @@ int remove_ITEM(int ItemID) {
 			backpack.ITEMINPACK[i].NBT[0] = 0;
 			backpack.ITEMINPACK[i].NBT[1] = 0;
 			backpack.ITEMINPACK[i].NBT[2] = 0;
+			i++;
+			for (i; i < 8; i++) {
+				backpack.ITEMINPACK[i-1].ITEMID = backpack.ITEMINPACK[i].ITEMID;
+				strcpy(backpack.ITEMINPACK[i-1].ITEMNAME, backpack.ITEMINPACK[i].ITEMNAME);
+				strcpy(backpack.ITEMINPACK[i-1].DESCRIPTION,backpack.ITEMINPACK[i].DESCRIPTION );
+				backpack.ITEMINPACK[i - 1].NBT[0] = 0;
+				backpack.ITEMINPACK[i - 1].NBT[1] = 0;
+				backpack.ITEMINPACK[i - 1].NBT[2] = 0;
+			}
 			return 1;
 		}
 	}
@@ -453,11 +463,11 @@ int common_command_Trans(struct ACTION action){
 			printf(">");
 			scanf("%s", input);
 			for (int i = 0; i <= show_BACKPACK(0); i++) {
-				if ((atoi(input) == i) || ((strcmp(input, backpack.ITEMINPACK[i - 1].ITEMNAME)) == 0)) {
+				if (atoi(input) == i) {
 					printf("[No.%d]-[%s]\nNBT = {%d,%d,%d}\n描述 [%s]\n", i, backpack.ITEMINPACK[i - 1].ITEMNAME, backpack.ITEMINPACK[i - 1].NBT[0], backpack.ITEMINPACK[i - 1].NBT[1], backpack.ITEMINPACK[i - 1].NBT[2], backpack.ITEMINPACK[i - 1].DESCRIPTION);
 					goto backpack_choice;
 				}
-				if ((atoi(input) == show_BACKPACK(0) + 1) || ((strcmp(input, "exit") == 0))) {
+				if ((atoi(input) == show_BACKPACK(0) + 1)) {
 					goto main_start;
 				}
 				if (strcmp(input, "show") == 0) {

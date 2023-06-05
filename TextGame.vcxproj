@@ -135,6 +135,7 @@
     <ClInclude Include="cJSON.h" />
     <ClInclude Include="json_function.h" />
     <ClInclude Include="function.h" />
+    <ClInclude Include="json_plot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="charactor.json" />
@@ -144,7 +145,9 @@
     <None Include="save.f" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Trans_CN.txt" />
+    <Text Include="Item_Trans_CN.txt" />
+    <Text Include="pack_01_plot.txt" />
+    <Text Include="pack_01_Trans_CN.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

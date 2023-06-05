@@ -1,0 +1,5 @@
+#node_1#
+#这是siss4uer开发的文字游戏
+#你现在处于开发者测试界面#以上文本是在出发comman_command_trans()函数之前的剧情文本
+#这个文本按照知道那个符号为分割并以特定符号为结尾
+#接下来将触发comman_command_trans()函数$

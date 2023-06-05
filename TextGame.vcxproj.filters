@@ -35,6 +35,9 @@
     <ClInclude Include="json_function.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="json_plot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="save.f">
@@ -54,7 +57,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Trans_CN.txt">
+    <Text Include="Item_Trans_CN.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="pack_01_Trans_CN.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="pack_01_plot.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>

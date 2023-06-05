@@ -1,0 +1,83 @@
+{
+  "node_1": {
+    "command": "action",
+    "action": 3,
+    "Operate": {
+      "selection_1": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "node_2"
+      },
+      "selection_2": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "node_2"
+      },
+      "selection_3": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "node_2"
+      }
+    }
+  },
+  "node_2": {
+    "command": "action",
+    "action": 2,
+    "Operate": {
+      "selection_1": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "node_final"
+      },
+      "selection_2": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "node_final"
+      }
+    }
+  },
+  "node_final": {
+    "command": "action",
+    "action": 2,
+    "Operate": {
+      "selection_1": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "pack_02.json"
+      },
+      "selection_2": {
+        "operate": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "next_node": "pack_03.json"
+      }
+    }
+  }
+}
